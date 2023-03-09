@@ -13,8 +13,13 @@ const app = express();
 //BASE DE DATOS
 dbConnection()
 
+
 //CORS
-app.use( cors() ) //Middleware //para que el servidor acepte peticiones de otros dominios
+const corsOptions = {
+    origin: 'https://just-to-do-it.vercel.app/',
+    optionsSuccessStatus: 200 
+}
+app.use( cors(corsOptions) ) //Middleware //para que el servidor acepte peticiones de otros dominios
 
 //DIRECTORIO PUBLICO
 app.use( express.static('public') ) //middleware //para que express entienda los archivos estaticos que se envian en el body
@@ -34,6 +39,6 @@ app.use('/api/tasks', tasksRouter ) //middleware rutas de las tasks
 
 //ESCUCHAR PETICIONES
 
-app.listen(4000, () => {
+app.listen( process.env.PORT, () => {
     console.log(`Servidor funcionando en el puerto ${process.env.PORT}`);
 })
