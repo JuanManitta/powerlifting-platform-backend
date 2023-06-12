@@ -3,9 +3,11 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { generateJWT } = require('../helpers/jwt');
 
+
+
 // Create user
 const createUser = async(req, res = response) => {
-    const { email, password } = req.body;
+    const { email, password, gym } = req.body;
 
     
     try {
@@ -32,6 +34,7 @@ const createUser = async(req, res = response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            gym: user.gym,
             token
         })
         
@@ -43,29 +46,27 @@ const createUser = async(req, res = response) => {
         });    
     }
 };
-
 // Login user
 const loginUser = async(req, res = response) => {
     const { email, password } = req.body;
     
-
     try {
-
         // Check if email exists
         let user = await User.findOne({ email });
         if(!user) {
             return res.status(400).json({
                 ok: false,
-                msg: 'user and password are not correct'
+                msg: 'email or password are not correct'
             });
         }
 
         //check password is correct
-        const validPassword = bcrypt.compareSync(password, user.password);        
+        const validPassword = bcrypt.compareSync(password, user.password);  
+
         if(!validPassword) {
             return res.status(400).json({
                 ok: false,
-                msg: 'user and password are not correct'
+                msg: 'eamil or password are not correct'
             });
         }
 
@@ -76,6 +77,7 @@ const loginUser = async(req, res = response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            gym: user.gym,
             token,
         })
         
@@ -86,8 +88,6 @@ const loginUser = async(req, res = response) => {
         });
     }
 };
-
-
 //Reenew token JWT
 const renewToken = async(req, res = response) => {
 
@@ -102,6 +102,9 @@ const renewToken = async(req, res = response) => {
         token
     })
 };
+
+
+
 
 module.exports = {
     createUser,

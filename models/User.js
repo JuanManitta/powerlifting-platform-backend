@@ -14,6 +14,10 @@ const userSchema = Schema({
         type: String,
         required: true
     },
+    gym: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = model('User', userSchema);

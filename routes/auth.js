@@ -12,20 +12,20 @@ const { validateJWT } = require('../middlewares/validate-jwt');
 router.post(
     '/new',
     [ 
-        check('name', 'El nombre es obligatorio').not().isEmpty(), // Que el nombre no este vacio
-        check('email', 'El email es obligatorio').isEmail(), // Que el email sea un email
+        check('name', 'El nombre es obligatorio').not().isEmpty(),
+        check('email', 'El email es obligatorio').isEmail(),
+        check('gym', 'El gym es obligatorio').not().isEmpty(),
         check('password', 'El password debe ser de 6 caracteres').isLength({ min: 6 }),
         validateFields,
-         // Que el password sea de 6 caracteres 
     ],
      createUser);
 
 router.post(
     '/',
     [
-        check('email', 'El email es obligatorio').isEmail(), // Que el email sea un email
+        check('email', 'El email es obligatorio').isEmail(),
         check('password', 'El password debe ser de 6 caracteres').isLength({ min: 6 }),
-        validateFields // Que el password sea de 6 caracteres
+        validateFields
     ],
      loginUser );
 
