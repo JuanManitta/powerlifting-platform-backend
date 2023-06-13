@@ -31,7 +31,7 @@ const createUser = async(req, res = response) => {
         // Generate JWT
         const token = await generateJWT(user.id, user.name);
 
-        const serialized = serialize( 'myTokenCookie', data.token, {
+        const serialized = serialize( 'myTokenCookie', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'none',
