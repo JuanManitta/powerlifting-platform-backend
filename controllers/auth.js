@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { generateJWT } = require('../helpers/jwt');
+const { serialize } = require('cookie');
 
 
 
@@ -29,13 +30,23 @@ const createUser = async(req, res = response) => {
 
         // Generate JWT
         const token = await generateJWT(user.id, user.name);
+
+        const serialized = serialize( 'myTokenCookie', data.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'none',
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            path: '/'
+        })
+        res.setHeader('Set-Cookie', serialized )
         // Create user OK
         res.status(201).json({
             ok: true,
             uid: user.id,
             name: user.name,
             gym: user.gym,
-            token
+            token,
+            serialized
         })
         
     } catch (error) {
