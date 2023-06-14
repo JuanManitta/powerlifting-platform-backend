@@ -7,56 +7,54 @@ const { generateJWT } = require('../helpers/jwt');
 
 // Create user
 const createUser = async(req, res = response) => {
-    
-    res.cookie('cookie','coockie',{
-        maxAge: 7000 * 60,
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax'
-       })
-       
-    // const { email, password, gym } = req.body;
+    const { email, password, gym } = req.body;
 
     
-    // try {
-    //     let user = await User.findOne({ email });
+    try {
+        let user = await User.findOne({ email });
+        if(user) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'User already exists'
+            });
+        }
 
-    //     if(user) {
-    //         return res.status(400).json({
-    //             ok: false,
-    //             msg: 'User already exists'
-    //         });
-    //     }
+        user = new User(req.body);
 
-    //     user = new User(req.body);
+        // Encrypt password
+        const salt = bcrypt.genSaltSync();
+        user.password = bcrypt.hashSync(password, salt);
 
-    //     // Encrypt password
-    //     const salt = bcrypt.genSaltSync();
-    //     user.password = bcrypt.hashSync(password, salt);
+        await user.save();
 
-    //     await user.save();
+        // Generate JWT
+        const token = await generateJWT(user.id, user.name);
 
-    //     // Generate JWT
-    //     const token = await generateJWT(user.id, user.name);
-
-    //     //Generate cookie
+        //Generate cookie
+        res.cookie('myCookieToken', 'cookieToken',{
+            maxAge: 36000000,
+            httpOnly: true,
+            secure: true,
+            httpOnly: true,
+            sameSite: 'lax'
+        });
        
-    //     // Create user OK
-    //     res.status(201).json({
-    //         ok: true,
-    //         uid: user.id,
-    //         name: user.name,
-    //         gym: user.gym,
-    //         token,
-    //     })
+        // Create user OK
+        res.status(201).json({
+            ok: true,
+            uid: user.id,
+            name: user.name,
+            gym: user.gym,
+            token,
+        })
         
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json({
-    //         ok: false,
-    //         msg: 'Please contact the administrator'
-    //     });    
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Please contact the administrator'
+        });    
+    }
 };
 // Login user
 const loginUser = async(req, res = response) => {

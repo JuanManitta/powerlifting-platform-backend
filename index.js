@@ -11,9 +11,7 @@ const cookieParser = require('cookie-parser');
 //CREAR EL SERVIDOR DE EXPRESS
 const app = express();
 
-//COOKIE
 
-app.use(cookieParser())
 
 //BASE DE DATOS
 dbConnection()
@@ -33,12 +31,11 @@ app.use( express.json() ); //middleware //para que express entienda los json que
 
 //RUTAS
 
+
 app.use('/api/auth', authRouter ); //middleware //rutas de auth 
 app.use('/api/tasks', tasksRouter ) //middleware rutas de las tasks
 
-
-//TODO: auth // crear, login, renew
-//TODO: CRUD: Tareas
+app.use(cookieParser())
 
 
 //ESCUCHAR PETICIONES
