@@ -4,14 +4,11 @@ require('dotenv').config();
 const authRouter = require('./routes/auth');
 const tasksRouter = require('./routes/tasks')
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 
 
 
 //CREAR EL SERVIDOR DE EXPRESS
 const app = express();
-
-
 
 //BASE DE DATOS
 dbConnection()
@@ -31,11 +28,12 @@ app.use( express.json() ); //middleware //para que express entienda los json que
 
 //RUTAS
 
-
 app.use('/api/auth', authRouter ); //middleware //rutas de auth 
 app.use('/api/tasks', tasksRouter ) //middleware rutas de las tasks
 
-app.use(cookieParser())
+
+//TODO: auth // crear, login, renew
+//TODO: CRUD: Tareas
 
 
 //ESCUCHAR PETICIONES

@@ -30,15 +30,6 @@ const createUser = async(req, res = response) => {
         // Generate JWT
         const token = await generateJWT(user.id, user.name);
 
-        //Generate cookie
-        res.cookie('myCookieToken', 'cookieToken',{
-            maxAge: 36000000,
-            httpOnly: true,
-            secure: true,
-            httpOnly: true,
-            sameSite: 'lax'
-        });
-       
         // Create user OK
         res.status(201).json({
             ok: true,
