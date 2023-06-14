@@ -12,6 +12,7 @@ const createUser = async(req, res = response) => {
     
     try {
         let user = await User.findOne({ email });
+
         if(user) {
             return res.status(400).json({
                 ok: false,
@@ -31,10 +32,12 @@ const createUser = async(req, res = response) => {
         const token = await generateJWT(user.id, user.name);
 
         //Generate cookie
-        res.cookie('myCookieToken', token,{
-            maxAge: 36000000,
-            httpOnly: true
-        });
+       res.cookie('cookie','coockie',{
+        maxAge: 7000 * 60,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax'
+       })
        
         // Create user OK
         res.status(201).json({
