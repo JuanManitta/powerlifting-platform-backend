@@ -4,11 +4,16 @@ require('dotenv').config();
 const authRouter = require('./routes/auth');
 const tasksRouter = require('./routes/tasks')
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 
 
 //CREAR EL SERVIDOR DE EXPRESS
 const app = express();
+
+//COOKIE
+
+app.use(cookieParser())
 
 //BASE DE DATOS
 dbConnection()
